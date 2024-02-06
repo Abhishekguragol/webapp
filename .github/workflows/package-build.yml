@@ -18,6 +18,14 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+
+    - name: Setup MYSQL
+      uses: mysql/mysql-action@v2
+      with:
+        version: 8.0.29  
+        default-schema: cloudproject 
+        username: root
+        password: MyPass
     
     - name: Run 
       run: mvn clean package
