@@ -5,9 +5,23 @@ on:
     branches: [main]
 
 jobs:
+
   build:
     name: Build
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: cloudproject
+          MYSQL_USER: abhi
+          MYSQL_PASSWORD: MyPass
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    
     
     steps:
     - name: Checkout
@@ -19,13 +33,9 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
 
-    - name: Setup MYSQL
-      uses: mysql/mysql-action@v2
-      with:
-        version: 8.0.29  
-        default-schema: cloudproject 
-        username: root
-        password: MyPass
+    - name: Install MySQL client
+      run: sudo apt-get install -y mysql-client
+
     
     - name: Run 
       run: mvn clean package
