@@ -14,6 +14,7 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
+          MYSQL_ROOT_PASSWORD: MyPass
           MYSQL_DATABASE: cloudproject
           MYSQL_USER: abhi
           MYSQL_PASSWORD: MyPass
