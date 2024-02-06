@@ -13,7 +13,7 @@ target/
 # Log file
 *.log
 
-
+.vscode/
 target/
 pom.xml.tag
 pom.xml.releaseBackup
