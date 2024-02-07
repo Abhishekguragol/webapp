@@ -1,7 +1,11 @@
 package com.project.csye6225.project.controller;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
@@ -24,32 +28,35 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/healthz")
 public class HealthController {
 
+    private final DataSource source;
+
+    public HealthController(DataSource source){
+        this.source = source;
+    }
+    
     @Autowired UserService userService;
 
     @GetMapping()
     public ResponseEntity<Object> healthCheck(@RequestParam Map<String,String> params, @RequestBody(required = false) String body){
 
+        
         // Return HTTP 400 Bad Request if the request has a payload
         if ((params.size() > 0) || body != null) {
             return ResponseEntity.badRequest().build();
         }
-
-        try {
             // Check database connectivity
-            List<User> user = userService.getUsers();
-            // Return HTTP 200 OK 
-            return ResponseEntity
+            try (Connection con = source.getConnection()) {
+                return ResponseEntity
                     .status(HttpStatus.OK)
                     .cacheControl(CacheControl.noCache())
                     .build();
-        } catch (Exception e) {
-            // Return HTTP 503 Service Unavailable
-            return ResponseEntity
+            }
+            catch(SQLException e){
+                return ResponseEntity
                     .status(HttpStatus.SERVICE_UNAVAILABLE)
                     .cacheControl(CacheControl.noCache())
                     .build();
-        }
-
+            }
         
     }
 

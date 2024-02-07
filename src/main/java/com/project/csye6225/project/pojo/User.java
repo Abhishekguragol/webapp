@@ -1,6 +1,7 @@
 package com.project.csye6225.project.pojo;
 
 import java.sql.Date;
+import java.time.Instant;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -34,11 +35,11 @@ public class User {
 
     @Column(nullable = true)
     @CreationTimestamp
-    private Date accountCreated;
+    private Instant accountCreated;
 
     @UpdateTimestamp
     @Column(nullable = true)
-    private Date accountUpdated;
+    private Instant accountUpdated;
 
     public String getID() {
         return ID;
@@ -80,12 +81,12 @@ public class User {
         this.password = password;
     }
 
-    public Date getAccountCreated() {
+    public Instant getAccountCreated() {
         return accountCreated;
     }
 
 
-    public Date getAccountUpdated() {
+    public Instant getAccountUpdated() {
         return accountUpdated;
     } 
 
