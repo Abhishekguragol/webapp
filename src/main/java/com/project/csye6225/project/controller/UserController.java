@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.util.Base64;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,6 +152,7 @@ public class UserController {
         User newUser;
         try {
             newUser = mapper.readValue(body, User.class);
+            if(!isEmailValid(newUser.getUsername())) {return ResponseEntity.badRequest().build();}
             userService.addUser(newUser);
             JSONObject js = jsonMapper(newUser);
             return  ResponseEntity
@@ -185,6 +187,11 @@ public class UserController {
         obj.put("accpunt_updated", user.getAccountUpdated());
 
         return obj;
+    }
+
+    public boolean isEmailValid(String email) {
+        final Pattern EMAIL_REGEX = Pattern.compile("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", Pattern.CASE_INSENSITIVE);
+        return EMAIL_REGEX.matcher(email).matches();
     }
 
     
