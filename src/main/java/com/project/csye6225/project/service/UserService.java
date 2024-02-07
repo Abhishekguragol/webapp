@@ -48,4 +48,14 @@ public class UserService {
         return fetchedUser;
     }
     
+    public void updateByID(String id, User user){
+
+        User userDb = userRepository.getReferenceById(id);
+        userDb.setFirst_name(user.getFirst_name());
+        userDb.setLast_name(user.getLast_name());
+        userDb.setPassword(user.getPassword());
+
+        addUser(userDb);
+
+    }
 }

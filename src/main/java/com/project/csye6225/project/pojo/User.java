@@ -3,6 +3,8 @@ package com.project.csye6225.project.pojo;
 import java.sql.Date;
 import java.util.UUID;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +24,8 @@ public class User {
     private String ID;
 
     // First and last name of user
-    private String Fname;
-    private String Lname;
+    private String first_name;
+    private String last_name;
 
     // Username (email)
     @Column(unique = true)
@@ -33,35 +35,35 @@ public class User {
     private String password;
 
     @Column(nullable = true)
+    @CreationTimestamp
     private Date accountCreated;
 
+    @UpdateTimestamp
     @Column(nullable = true)
     private Date accountUpdated;
 
-    
-
-    public String getFname() {
-        return Fname;
+    public String getID() {
+        return ID;
     }
 
-    public void setFname(String fname) {
-        Fname = fname;
+    public void setID(String iD) {
+        ID = iD;
     }
 
-    public String getLname() {
-        return Lname;
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public void setLname(String lname) {
-        Lname = lname;
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
     }
 
-    public Date getAccountCreated() {
-        return accountCreated;
+    public String getLast_name() {
+        return last_name;
     }
 
-    public Date getAccountUpdated() {
-        return accountUpdated;
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
     }
 
     public String getUsername() {
@@ -80,13 +82,25 @@ public class User {
         this.password = password;
     }
 
-    public String getID() {
-        return ID;
+    public Date getAccountCreated() {
+        return accountCreated;
     }
 
-    public void setID(String iD) {
-        ID = iD;
+    public void setAccountCreated(Date accountCreated) {
+        this.accountCreated = accountCreated;
     }
+
+    public Date getAccountUpdated() {
+        return accountUpdated;
+    }
+
+    public void setAccountUpdated(Date accountUpdated) {
+        this.accountUpdated = accountUpdated;
+    }
+
+    
+
+    
 
 
 }
