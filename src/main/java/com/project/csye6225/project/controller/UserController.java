@@ -60,7 +60,6 @@ public class UserController {
                 User user = userService.getByName(newUser.getUsername());
 
                 JSONObject obj = jsonMapper(user);
-                String str = obj.toString();
             
                 return  ResponseEntity
                 .status(HttpStatusCode.valueOf(200))
@@ -153,11 +152,11 @@ public class UserController {
         try {
             newUser = mapper.readValue(body, User.class);
             userService.addUser(newUser);
-            String js = mapper.writeValueAsString(newUser);
+            JSONObject js = jsonMapper(newUser);
             return  ResponseEntity
                     .status(HttpStatus.OK)
                     .cacheControl(CacheControl.noCache())
-                    .body(js);
+                    .body(js.toString());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();

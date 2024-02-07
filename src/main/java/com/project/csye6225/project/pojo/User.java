@@ -1,17 +1,15 @@
 package com.project.csye6225.project.pojo;
 
 import java.sql.Date;
-import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.springframework.stereotype.Component;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Component
@@ -86,21 +84,10 @@ public class User {
         return accountCreated;
     }
 
-    public void setAccountCreated(Date accountCreated) {
-        this.accountCreated = accountCreated;
-    }
 
     public Date getAccountUpdated() {
         return accountUpdated;
-    }
-
-    public void setAccountUpdated(Date accountUpdated) {
-        this.accountUpdated = accountUpdated;
-    }
-
-    
-
-    
+    } 
 
 
 }
