@@ -73,7 +73,7 @@ public class UserController {
                 return  ResponseEntity
                 .status(HttpStatusCode.valueOf(200))
                 .cacheControl(CacheControl.noCache())
-                .body(obj);
+                .body(obj.toString());
             
             }
             // If  the authentication fails send an Unauthorised message

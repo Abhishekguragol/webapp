@@ -56,7 +56,7 @@ public class IntegrationTests {
         User user = new User();
         user.setFirst_name("Abhis");
         user.setLast_name("G");
-        user.setPassword("MyPass2");
+        user.setPassword("MyPass");
         user.setUsername("abhishek@gmail.com");
 
         // Updating a user present in the Database using  the put request
@@ -73,8 +73,7 @@ public class IntegrationTests {
         // Validating if the user details has been updated in the database by fetching User using get request
             given()
                 .port(8080)
-                .auth().preemptive().basic("abhishek@gmail.com", "MyPass2")
-                .contentType(ContentType.JSON)
+                .auth().preemptive().basic("abhishek@gmail.com", "MyPass")
                 .accept(ContentType.JSON) 
             .when()
                 .get("/v1/user/self")
