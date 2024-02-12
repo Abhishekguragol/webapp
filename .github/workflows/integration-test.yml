@@ -50,11 +50,9 @@ jobs:
             distribution: 'temurin'
   
         - name: Run Spring Boot application with MySQL
-          run: mvn spring-boot:run -Dspring.datasource.url=jdbc:mysql://localhost:3306/cloudproject -Dspring.datasource.username=root -Dspring.datasource.password=MyPass -Dspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver -Dspring.jpa.hibernate.ddl-auto=update -Dspring.datasource.hikari.connection-timeout=20000
+          run: |
+            mvn spring-boot:run -Dspring.datasource.url=jdbc:mysql://localhost:3306/cloudproject -Dspring.datasource.username=root -Dspring.datasource.password=MyPass -Dspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver -Dspring.jpa.hibernate.ddl-auto=update -Dspring.datasource.hikari.connection-timeout=20000 &
+            sleep 40 # Wait for the service to start up
+            mvn test
   
-        - name: Wait for application to start
-          run: sleep 40 
-  
-        - name: Run integration tests
-          run: mvn test
   
