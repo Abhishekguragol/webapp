@@ -73,7 +73,7 @@ public class UserController {
                 return  ResponseEntity
                 .status(HttpStatusCode.valueOf(200))
                 .cacheControl(CacheControl.noCache())
-                .body(obj.toString());
+                .body(obj);
             
             }
             // If  the authentication fails send an Unauthorised message
@@ -194,7 +194,7 @@ public class UserController {
             return  ResponseEntity
                     .status(HttpStatusCode.valueOf(201))
                     .cacheControl(CacheControl.noCache())
-                    .body(js.toString());
+                    .body(js);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
