@@ -1,6 +1,5 @@
 package com.project.csye6225.project.pojo;
 
-import java.sql.Date;
 import java.time.Instant;
 
 import org.hibernate.annotations.CreationTimestamp;

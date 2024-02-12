@@ -2,7 +2,6 @@ package com.project.csye6225.project.controller;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -17,11 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.project.csye6225.project.pojo.User;
 import com.project.csye6225.project.service.UserService;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
