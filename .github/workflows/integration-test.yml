@@ -31,10 +31,17 @@ jobs:
         mysql:
           image: mysql:latest
           env:
+<<<<<<< HEAD
             MYSQL_DATABASE: cloudproject
             MYSQL_USER: ${{secrets.DB_USER_NAME}}
             MYSQL_PASSWORD: ${{secrets.DB_PASSWORD}}
             MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASSWORD}}
+=======
+            MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASSWORD}}
+            MYSQL_DATABASE: cloudproject
+            MYSQL_USER: ${{secrets.DB_USER_NAME}}
+            MYSQL_PASSWORD: ${{secrets.DB_PASSWORD}}
+>>>>>>> 56294a3 (Update to use secrets)
           ports:
             - 3306:3306
           options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
