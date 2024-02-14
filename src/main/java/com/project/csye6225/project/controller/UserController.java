@@ -119,15 +119,14 @@ public class UserController {
                 // Map the  received json object into java object
                 recUser = mapper.readValue(body, User.class);
                 // Check if user is trying to modify account created/updated fields
-                if(recUser.getAccountCreated() != null || recUser.getAccountUpdated()!=null) {
+                if(recUser.getAccountCreated() != null || recUser.getAccountUpdated()!=null || recUser.getUsername() != null) {
                     return ResponseEntity.badRequest().build();
                 }
-                // Check if the user details being modified are the same as the authenticated user
-                if(recUser.getUsername().equals( userCreds[0])){
-                    
+                // Check if the user details being modified are the same as the authenticated user  
+                    if(recUser.getPassword() == null) { recUser.setPassword(newUser.getPassword());}
                     // Update the user data with the new data provided in the request
                     userService.updateByID(userService
-                                            .getByName(recUser.getUsername())
+                                            .getByName(newUser.getUsername())
                                             .getID(), 
                                             recUser);
                     // If successfully updated return 204 with no conent
@@ -136,11 +135,7 @@ public class UserController {
                     .cacheControl(CacheControl.noCache())
                     .build();
 
-                }
-                // If username from body is diff from authenticated user then return Unauthorized
-                else {
-                    return ResponseEntity.status(HttpStatusCode.valueOf(401)).build();
-                }
+                
                 
             }
             // If any error in the object sent then return bad requested 

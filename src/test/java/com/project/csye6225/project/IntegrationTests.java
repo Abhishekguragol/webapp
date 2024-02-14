@@ -57,7 +57,6 @@ public class IntegrationTests {
         user.setFirst_name("Abhis");
         user.setLast_name("G");
         user.setPassword("MyPass");
-        user.setUsername("abhishek@gmail.com");
 
         // Updating a user present in the Database using  the put request
         given()

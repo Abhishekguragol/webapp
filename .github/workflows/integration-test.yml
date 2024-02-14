@@ -31,10 +31,10 @@ jobs:
         mysql:
           image: mysql:latest
           env:
-            MYSQL_ROOT_PASSWORD: MyPass
+            MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASSWORD}}
             MYSQL_DATABASE: cloudproject
-            MYSQL_USER: abhi
-            MYSQL_PASSWORD: MyPass
+            MYSQL_USER: ${{secrets.DB_USER_NAME}}
+            MYSQL_PASSWORD: ${{secrets.DB_PASSWORD}}
           ports:
             - 3306:3306
           options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -51,7 +51,7 @@ jobs:
   
         - name: Run Spring Boot application with MySQL
           run: |
-            mvn spring-boot:run -Dspring.datasource.url=jdbc:mysql://localhost:3306/cloudproject -Dspring.datasource.username=abhi -Dspring.datasource.password=MyPass -Dspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver -Dspring.jpa.hibernate.ddl-auto=update -Dspring.datasource.hikari.connection-timeout=20000 &
+            mvn spring-boot:run -Dspring.datasource.url=jdbc:mysql://localhost:3306/cloudproject -Dspring.datasource.username=${{secrets.DB_USER_NAME}} -Dspring.datasource.password=${{secrets.DB_PASSWORD}} -Dspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver -Dspring.jpa.hibernate.ddl-auto=update -Dspring.datasource.hikari.connection-timeout=20000 &
             sleep 40 # Wait for the service to start up
             mvn test
   
