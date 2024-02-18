@@ -9,9 +9,24 @@ jobs:
   packer:
     runs-on: ubuntu-latest
     name: packer-format-validate
+    services:
+        mysql:
+          image: mysql:latest
+          env:
+            MYSQL_DATABASE: cloudproject
+            MYSQL_USER: ${{secrets.DB_USER_NAME}}
+            MYSQL_PASSWORD: ${{secrets.DB_PASSWORD}}
+            MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASSWORD}}
+          ports:
+            - 3306:3306
+          options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - uses: actions/checkout@v3
 
+      - name: Build project
+        run: mvn clean build -DskipTests
+        
       - name: Setup `packer`
         uses: hashicorp/setup-packer@main
 
