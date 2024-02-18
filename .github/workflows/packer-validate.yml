@@ -44,11 +44,11 @@ jobs:
 
         - name: Run `packer init`
           id: init
-          run: "packer init ./build-ami.pkr.hcl"
+          run: "packer init ./build-mi.pkr.hcl"
 
         - name: Run `packer format`
-          run: "packer fmt -check ./build-ami.pkr.hcl"
+          run: "packer fmt -check ./build-mi.pkr.hcl"
 
         - name: Run `packer validate`
           id: validate
-          run: "packer validate ./build-ami.pkr.hcl"
+          run: "packer validate ./build-mi.pkr.hcl"
