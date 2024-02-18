@@ -26,3 +26,5 @@ This repository is designed to be a cloud native web application (backend servic
 3. To run the application: mvn spring-boot:run
 4. To run test files: mvn test
 5. To build the project: mvn clean package
+6. packer init: Initialise packer
+7. packer validate: checks the validity of packer file/template
