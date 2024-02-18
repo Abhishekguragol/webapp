@@ -11,7 +11,7 @@ jobs:
     name: packer-format-validate
     services:
         mysql:
-          image: mysql:latest
+          image: mysql:8.0
           env:
             MYSQL_DATABASE: cloudproject
             MYSQL_USER: ${{secrets.DB_USER_NAME}}
