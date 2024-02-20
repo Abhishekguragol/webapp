@@ -27,18 +27,6 @@ jobs:
       needs: build
       runs-on: ubuntu-latest
   
-      services:
-        mysql:
-          image: mysql:latest
-          env:
-            MYSQL_DATABASE: cloudproject
-            MYSQL_USER: ${{secrets.DB_USER_NAME}}
-            MYSQL_PASSWORD: ${{secrets.DB_PASSWORD}}
-            MYSQL_ROOT_PASSWORD: ${{secrets.DB_PASSWORD}}
-          ports:
-            - 3306:3306
-          options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-  
       steps:
         - name: Checkout
           uses: actions/checkout@v3
@@ -48,6 +36,9 @@ jobs:
           with:
             java-version: '17'
             distribution: 'temurin'
+        
+        - name: Setup MySQL
+          run: sudo systemctl start mysql.service
   
         - name: Run Spring Boot application with MySQL
           run: |

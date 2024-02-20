@@ -38,6 +38,31 @@ variable "disk_type" {
 }
 
 
+variable "ssh_username" {
+  type    = string
+  default = "packer"
+}
+
+variable "image_family" {
+  type    = string
+  default = "csye6225-app-image"
+}
+
+variable "image_name" {
+  type    = string
+  default = "csye6225-{{timestamp}}"
+}
+
+variable "image_description" {
+  type    = string
+  default = "CSYE 6225 App Custom Image"
+}
+
+variable "image_storage_locations" {
+  type    = list(string)
+  default = ["us"]
+}
+
 source "googlecompute" "csye6225-app-custom-image" {
   project_id              = var.project
   source_image_family     = var.source_image
@@ -45,12 +70,13 @@ source "googlecompute" "csye6225-app-custom-image" {
   zone                    = var.zone
   disk_size               = var.disk_size
   disk_type               = var.disk_type
-  image_name              = "csye6225-{{timestamp}}"
-  image_description       = "CSYE 6225 App Custom Image"
-  image_family            = "csye6225-app-image"
+  image_name              = var.image_name
+  image_description       = var.image_description
+  image_family            = var.image_family
   image_project_id        = var.project
-  image_storage_locations = ["us"]
-  ssh_username            = "packer"
+  image_storage_locations = var.image_storage_locations
+  ssh_username            = var.ssh_username
+
 
 }
 
@@ -65,6 +91,8 @@ build {
   }
 
   provisioner "shell" {
-    scripts = ["./scripts/base.sh"]
+    scripts = [
+      "./scripts/user.sh",
+    "./scripts/base-setup.sh"]
   }
 }

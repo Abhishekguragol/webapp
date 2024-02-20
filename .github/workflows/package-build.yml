@@ -39,5 +39,5 @@ jobs:
 
     
     - name: Run 
-      run: mvn compile
+      run: mvn compile -DskipTests
 

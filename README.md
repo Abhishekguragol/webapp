@@ -28,3 +28,18 @@ This repository is designed to be a cloud native web application (backend servic
 5. To build the project: mvn clean package
 6. packer init: Initialise packer
 7. packer validate: checks the validity of packer file/template
+8. gcloud iam service-accounts create packer \
+  --project csye6225-dev-414923 \
+  --description="Packer Service Account" \
+  --display-name="Packer Service Account"  : Create a new service account called packer
+9. gcloud projects add-iam-policy-binding csye6225-dev-414923\
+    --member=serviceAccount:packer@csye6225-dev-414923.iam.gserviceaccount.com \
+    --role=roles/compute.instanceAdmin.v1 : grant the packer account Instance Admin Role
+
+10. gcloud projects add-iam-policy-binding csye6225-dev-414923 \
+    --member=serviceAccount:packer@csye6225-dev-414923.iam.gserviceaccount.com \
+    --role=roles/iam.serviceAccountUser  : Grant the packer account User role so it can use the SA
+
+11. gcloud projects add-iam-policy-binding csye6225-dev-414923 \
+    --member=serviceAccount:packer@csye6225-dev-414923.iam.gserviceaccount.com \
+    --role=roles/iap.tunnelResourceAccessor : Grant  IAP Tunneling access for Packer VM to make requests to App Engine
