@@ -4,6 +4,10 @@ echo "------------Daemon service reload-------------"
 sudo systemctl daemon-reload
 echo "----------------------------------------------"
 
-echo "------------Daemon service reload-------------"
-sudo systemctl enable appstart
+echo "------------Enable mysql service-------------"
+sudo systemctl enable mysqld.service
+echo "----------------------------------------------"
+
+echo "------------Enable app service-------------"
+sudo systemctl enable appstart.service
 echo "----------------------------------------------"

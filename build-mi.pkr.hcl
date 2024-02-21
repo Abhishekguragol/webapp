@@ -9,7 +9,7 @@ packer {
 
 variable "project" {
   type    = string
-  default = "csye6225-413921"
+  default = "csye6225-dev-414923"
 }
 
 variable "region" {
