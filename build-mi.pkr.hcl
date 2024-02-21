@@ -90,9 +90,14 @@ build {
     destination = "/tmp/"
   }
 
+  provisioner "file" {
+    source      = "./services/appstart.service"
+    destination = "/tmp/"
+  }
   provisioner "shell" {
     scripts = [
       "./scripts/user.sh",
-    "./scripts/base-setup.sh"]
+      "./scripts/base-setup.sh",
+    "./scripts/services.sh"]
   }
 }
