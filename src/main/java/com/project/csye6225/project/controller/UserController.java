@@ -189,7 +189,7 @@ public class UserController {
             return  ResponseEntity
                     .status(HttpStatusCode.valueOf(201))
                     .cacheControl(CacheControl.noCache())
-                    .body(js);
+                    .body(js.toString());
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.badRequest().build();
