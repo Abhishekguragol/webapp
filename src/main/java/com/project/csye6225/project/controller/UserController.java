@@ -6,6 +6,8 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
@@ -39,12 +41,16 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    Logger logger = (Logger) LogManager.getLogger("WEBAPP_LOGGER");
+
+
     // API to Get User Information
     @GetMapping("/user/self")
     public  ResponseEntity<Object> fetchUserInfo(@RequestParam Map<String,String> params, @RequestBody(required = false) String body, @RequestHeader(required = false) HttpHeaders header) {
        
         // Returns Bad request in case the request has a body or parameters
         if ((params.size() > 0) || body != null) {
+            logger.error("Bad Request: Request contains body");
             return ResponseEntity.badRequest().build();
         }
 
@@ -69,6 +75,7 @@ public class UserController {
                 // Map the user name to a Json object to be returned
                 JSONObject obj = jsonMapper(user);
             
+
                 // Return  the response entity with status code OK and the Json Object
                 return  ResponseEntity
                 .status(HttpStatusCode.valueOf(200))
@@ -78,12 +85,14 @@ public class UserController {
             }
             // If  the authentication fails send an Unauthorised message
             else {
+                logger.error("Unauthorised access");
                 return ResponseEntity.status(HttpStatusCode.valueOf(401)).build();
             }
 
         }
         // If authorizaztion header is not present send  a bad request
         else {
+            logger.error("Bad Request: No Auth Header");
             return ResponseEntity.badRequest().build();
         }
         
@@ -95,7 +104,8 @@ public class UserController {
     public ResponseEntity<Object> updateUser(@RequestParam Map<String,String> params, @RequestBody(required = false) String body, @RequestHeader(required = false) HttpHeaders header) {
         
         // If parameters are present or if there is not body send  Bad Request
-        if ((params.size() > 0) || body == null ) {
+        if ((params.size() > 0) || body != null) {
+            logger.error("Bad Request: Request contains body");
             return ResponseEntity.badRequest().build();
         }
 
@@ -140,18 +150,20 @@ public class UserController {
             }
             // If any error in the object sent then return bad requested 
             catch (Exception e) {
-                e.printStackTrace();
+                logger.error("Bad Request: Invalid User object");
                 return ResponseEntity.badRequest().build();
             }
 
             }
             // If authorisation fails return Unauthorized
             else{
+                logger.error("Unauthorised access");
                 return ResponseEntity.status(HttpStatusCode.valueOf(401)).build();
             }
         }
         // If authorization header is not present then return bad request 
         else {
+            logger.error("Bad Request: No Auth Header");
             return ResponseEntity.status(HttpStatusCode.valueOf(401)).build();
         }
     
@@ -164,12 +176,14 @@ public class UserController {
     public ResponseEntity<Object> createUser(@RequestParam Map<String,String> params, @RequestBody(required = false) String body, @RequestHeader(required = false) HttpHeaders header) {
         
         // If parameters are present or if there is not body send  Bad Request
-        if ((params.size() > 0) || body == null) {
+        if ((params.size() > 0) || body != null) {
+            logger.error("Bad Request: Request contains body");
             return ResponseEntity.badRequest().build();
         }
-
         // If there is an authorisation header return bad request
         if(header.getFirst("authorization") != null){
+
+            logger.error("Bad Request:Auth Header Present");
             return ResponseEntity.badRequest().build();
         }
         ObjectMapper mapper = getMapper();
@@ -181,6 +195,7 @@ public class UserController {
             if(!isEmailValid(newUser.getUsername())) {return ResponseEntity.badRequest().build();}
             // Call the service to add new user to database
             if(newUser.getAccountCreated() != null || newUser.getAccountUpdated()!=null) {
+                logger.error("Bad Request");
                 return ResponseEntity.badRequest().build();
             }
             userService.addUser(newUser);
@@ -191,7 +206,8 @@ public class UserController {
                     .cacheControl(CacheControl.noCache())
                     .body(js.toString());
         } catch (Exception e) {
-            e.printStackTrace();
+
+            logger.error("Bad Request");
             return ResponseEntity.badRequest().build();
         }
         

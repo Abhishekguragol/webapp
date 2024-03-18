@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Configuration>
+<Appenders>
+    <File name="WebAppErrors" fileName="/var/log/csye6225/app.log">
+            <JSONLayout compact="true" eventEol="true"/>
+            <BurstFilter level="ERROR" rate="2" maxBurst="10"/>
+        </File>
+        <Async name="AsyncAppender" bufferSize="80">
+            <AppenderRef ref="WebAppErrors"/>
+        </Async>
+</Appenders>
+
+<Loggers>
+    <Logger name="WEBAPP_LOGGER" level="ERROR"
+          additivity="false">
+            <AppenderRef ref="AsyncAppender" />
+        </Logger>
+</Loggers>
+</Configuration>
