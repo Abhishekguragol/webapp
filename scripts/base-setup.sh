@@ -16,6 +16,9 @@ echo "------------Setup Logs--------------------------------"
 sudo mkdir /var/log/csye6225
 sudo touch /var/log/csye6225/app.log
 sudo chown csye6225:csye6225 /var/log/csye6225/app.log
+
+sudo touch /var/log/csye6225/errors.log
+sudo chown csye6225:csye6225 /var/log/csye6225/errors.log
 echo "------------Logs ready--------------------------------"
 
 
@@ -26,6 +29,13 @@ echo "-------------------Installed Java 17---------------------"
 echo "------------Move service file-------------------------"
 sudo mv /tmp/appstart.service /etc/systemd/system/appstart.service
 echo "------------Move service file complete----------------"
+
+echo "-------------------Install Google Ops Agent---------------------"
+curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+sudo bash add-google-cloud-ops-agent-repo.sh --also-install \
+  --version=latest
+echo "-------------------Installed Google Ops Agent---------------------"
+
 
 # Check if user exists, then update ownership
 if id -u csye6225 >/dev/null 2>&1; then

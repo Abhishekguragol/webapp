@@ -176,7 +176,7 @@ public class UserController {
     public ResponseEntity<Object> createUser(@RequestParam Map<String,String> params, @RequestBody(required = false) String body, @RequestHeader(required = false) HttpHeaders header) {
         
         // If parameters are present or if there is not body send  Bad Request
-        if ((params.size() > 0) || body != null) {
+        if ((params.size() > 0) || body == null) {
             logger.error("Bad Request: Request contains body");
             return ResponseEntity.badRequest().build();
         }

@@ -98,6 +98,7 @@ build {
     scripts = [
       "./scripts/user.sh",
       "./scripts/base-setup.sh",
-    "./scripts/services.sh"]
+    "./scripts/services.sh",
+    "./scripts/agent-setup.sh"]
   }
 }

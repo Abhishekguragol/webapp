@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Configuration>
 <Appenders>
-    <File name="WebAppErrors" fileName="/var/log/csye6225/app.log">
+    <File name="WebAppErrors" fileName="/var/log/csye6225/errors.log">
             <JSONLayout compact="true" eventEol="true"/>
             <BurstFilter level="ERROR" rate="2" maxBurst="10"/>
         </File>
