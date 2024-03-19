@@ -41,7 +41,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    Logger logger = (Logger) LogManager.getLogger("WEBAPP_LOGGER");
+    Logger logger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_ERROR");
 
 
     // API to Get User Information

@@ -29,7 +29,9 @@ jobs:
             sudo touch /var/log/csye6225/info.log
 
         - name: Giving write permissions
-          run: sudo chmod ugo+wx /var/log/csye6225
+          run: |
+            sudo chmod ugo+wx /var/log/csye6225/errors.log
+            sudo chmod ugo+wx /var/log/csye6225/info.log
   
         - name: Run Spring Boot application with MySQL
           run: |
