@@ -23,6 +23,18 @@ jobs:
             - name: Setup MySQL
               run: sudo systemctl start mysql.service
             # Start spring boot and run integration tests
+
+            - name: Adding logging file
+              run: |
+                sudo mkdir --parents /var/log/csye6225
+                sudo touch /var/log/csye6225/errors.log
+                sudo touch /var/log/csye6225/info.log
+
+            - name: Giving write permissions
+              run: |
+                sudo chmod ugo+wx /var/log/csye6225/errors.log
+                sudo chmod ugo+wx /var/log/csye6225/info.log
+
             - name: Run integration tests
               run: | 
                 mvn spring-boot:run -Dspring.datasource.url=jdbc:mysql://localhost:3306/clouddb?createDatabaseIfNotExist=true -Dspring.datasource.username=${{secrets.DB_USER_NAME}} -Dspring.datasource.password=${{secrets.DB_PASSWORD}} -Dspring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver -Dspring.jpa.hibernate.ddl-auto=update -Dspring.datasource.hikari.connection-timeout=20000 &
