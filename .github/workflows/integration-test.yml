@@ -24,7 +24,7 @@ jobs:
 
         - name: Adding logging file
           run: |
-            mkdir --parents /var/log/csye6225
+            sudo mkdir --parents /var/log/csye6225
             sudo touch /var/log/csye6225/errors.log
             sudo touch /var/log/csye6225/info.log
 
