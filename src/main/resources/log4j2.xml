@@ -2,7 +2,7 @@
 <Configuration>
 <Appenders>
         <!-- For level "Errors" -->
-        <File name="WebAppErrors" fileName="./var/log/csye6225/errors.log">
+        <File name="WebAppErrors" fileName="/var/log/csye6225/errors.log">
             <JsonLayout properties="true" complete="true" compact="true">
                 <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd HH:mm:ss.SSS Z}" />
             </JsonLayout>            
@@ -13,7 +13,7 @@
         </Async>
 
         <!-- For level "INFO" -->
-        <File name="WebAppInfo" fileName="./var/log/csye6225/info.log">
+        <File name="WebAppInfo" fileName="/var/log/csye6225/info.log">
             <JsonLayout properties="true" complete="true" compact="true">
                 <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd HH:mm:ss.SSS Z}" />
             </JsonLayout>            
