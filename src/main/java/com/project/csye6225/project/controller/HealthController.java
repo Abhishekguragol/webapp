@@ -6,6 +6,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
@@ -32,22 +34,28 @@ public class HealthController {
     
     @Autowired UserService userService;
 
+    Logger errorLogger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_ERROR");
+    Logger infoLogger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_INFO");
+
     @GetMapping()
     public ResponseEntity<Object> healthCheck(@RequestParam Map<String,String> params, @RequestBody(required = false) String body){
 
         
         // Return HTTP 400 Bad Request if the request has a payload
         if ((params.size() > 0) || body != null) {
+            errorLogger.error("Bad request: Request body not null");
             return ResponseEntity.badRequest().build();
         }
             // Check database connectivity
             try (Connection con = source.getConnection()) {
+                infoLogger.info("Database  connection established successfully.");
                 return ResponseEntity
                     .status(HttpStatus.OK)
                     .cacheControl(CacheControl.noCache())
                     .build();
             }
             catch(SQLException e){
+                errorLogger.error("Failed to establish database  connection");
                 return ResponseEntity
                     .status(HttpStatus.SERVICE_UNAVAILABLE)
                     .cacheControl(CacheControl.noCache())
@@ -58,6 +66,7 @@ public class HealthController {
 
     @RequestMapping("**")
     public ResponseEntity<Object> handleAllOtherRequest() {
+        errorLogger.error("Invalid  endpoint requested");
         return  ResponseEntity
                 .status(HttpStatusCode.valueOf(405))
                 .cacheControl(CacheControl.noCache())

@@ -41,7 +41,11 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    // Logger for errors that occur in application
     Logger logger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_ERROR");
+
+    // Logger for logging  information about requests made by users
+    Logger infoLogger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_INFO");
 
 
     // API to Get User Information
@@ -76,6 +80,7 @@ public class UserController {
                 JSONObject obj = jsonMapper(user);
             
 
+                infoLogger.info("Succefully fetched user details for:"+userCreds[0]);
                 // Return  the response entity with status code OK and the Json Object
                 return  ResponseEntity
                 .status(HttpStatusCode.valueOf(200))
@@ -139,6 +144,7 @@ public class UserController {
                                             .getByName(newUser.getUsername())
                                             .getID(), 
                                             recUser);
+                    infoLogger.info("Credentials successfully updated for user:"+newUser.getUsername());
                     // If successfully updated return 204 with no conent
                     return  ResponseEntity
                     .status(HttpStatusCode.valueOf(204))
@@ -200,6 +206,7 @@ public class UserController {
             }
             userService.addUser(newUser);
             JSONObject js = jsonMapper(newUser);
+            infoLogger.info("User:"+newUser.getUsername()+"successfuly added");
             // Return 201 when user successfully added
             return  ResponseEntity
                     .status(HttpStatusCode.valueOf(201))

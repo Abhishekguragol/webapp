@@ -32,6 +32,9 @@ public class UserService {
 
         // Logic to fetch user based on the username
         User fetched = getByName(user.getUsername());
+        if (fetched == null) {
+            return false;
+        }
         String hashedPassword = fetched.getPassword();
         // Checks if the passwords match
         PasswordEncoder en = new Security().encoder();
