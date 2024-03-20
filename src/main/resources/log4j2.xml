@@ -1,38 +1,34 @@
 <?xml version="1.0"?>
 <Configuration>
 <Appenders>
-        <!-- For level "Errors" -->
-        <File name="WebAppErrors" fileName="/var/log/csye6225/errors.log">
-            <JsonLayout properties="true" complete="true" compact="true">
-                <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd HH:mm:ss.SSS Z}" />
-            </JsonLayout>            
-            <BurstFilter level="ERROR" rate="2" maxBurst="10"/>
-        </File>
-        <Async name="AsyncAppenderError" bufferSize="80">
-            <AppenderRef ref="WebAppErrors"/>
-        </Async>
-
-        <!-- For level "INFO" -->
-        <File name="WebAppInfo" fileName="/var/log/csye6225/info.log">
-            <JsonLayout properties="true" complete="true" compact="true">
-                <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd HH:mm:ss.SSS Z}" />
-            </JsonLayout>            
-            <BurstFilter level="ERROR" rate="2" maxBurst="10"/>
-        </File>
-        <Async name="AsyncAppenderInfo" bufferSize="80">
-            <AppenderRef ref="WebAppInfo"/>
-        </Async>
+    <File name="WebAppErrors" fileName="/var/log/csye6225/errors.log">
+        <JSONLayout compact="true" eventEol="true">
+            <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSX}" />
+        </JSONLayout>
+        <BurstFilter level="ERROR" rate="2" maxBurst="10"/>
+    </File>
+    <Async name="AsyncAppender" bufferSize="80">
+        <AppenderRef ref="WebAppErrors"/>
+    </Async>
+    <File name="WebAppInfo" fileName="/var/log/csye6225/info.log">
+        <JSONLayout compact="true" eventEol="true">
+            <KeyValuePair key="timestamp" value="$${date:yyyy-MM-dd'T'HH:mm:ss.SSSX}" />
+        </JSONLayout>
+        <BurstFilter level="INFO" rate="2" maxBurst="10"/>
+    </File>
+    <Async name="InfoAsyncAppender" bufferSize="80">
+        <AppenderRef ref="WebAppInfo"/>
+    </Async>
 </Appenders>
 
 <Loggers>
-        <Logger name="WEBAPP_LOGGER_ERROR" level="ERROR"
+    <Logger name="WEBAPP_LOGGER_ERROR" level="ERROR"
           additivity="false">
-            <AppenderRef ref="AsyncAppenderError" />
-        </Logger>
-
-        <Logger name="WEBAPP_LOGGER_INFO" level="INFO"
+        <AppenderRef ref="AsyncAppender" />
+    </Logger>
+    <Logger name="WEBAPP_LOGGER_INFO" level="INFO"
           additivity="false">
-            <AppenderRef ref="AsyncAppenderInfo" />
-        </Logger>
+        <AppenderRef ref="InfoAsyncAppender" />
+    </Logger>
 </Loggers>
 </Configuration>
