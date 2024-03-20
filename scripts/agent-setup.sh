@@ -7,6 +7,7 @@ logging:
       type: files
       include_paths:
       - /var/log/csye6225/errors.log
+      - /var/log/csye6225/info.log
   processors:
     webapp-processor:
       type: parse_json

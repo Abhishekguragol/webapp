@@ -19,6 +19,9 @@ sudo chown csye6225:csye6225 /var/log/csye6225/app.log
 
 sudo touch /var/log/csye6225/errors.log
 sudo chown csye6225:csye6225 /var/log/csye6225/errors.log
+
+sudo touch /var/log/csye6225/info.log
+sudo chown csye6225:csye6225 /var/log/csye6225/info.log
 echo "------------Logs ready--------------------------------"
 
 
