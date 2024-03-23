@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.csye6225.project.pojo.User;
+import com.project.csye6225.project.service.PubSubService;
 import com.project.csye6225.project.service.UserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,6 +41,10 @@ public class UserController {
     // Injecting User service  layer to this controller
     @Autowired
     private UserService userService;
+
+    // Injecting the service needed for  Pub/Sub functionality
+    @Autowired
+    private PubSubService pubSubService;
 
     // Logger for errors that occur in application
     Logger logger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_ERROR");
@@ -207,7 +212,12 @@ public class UserController {
             userService.addUser(newUser);
             JSONObject js = jsonMapper(newUser);
             infoLogger.info("User:"+newUser.getUsername()+"successfuly added");
+            
+            // Publish message to GCP
+            pubSubService.publishPubSubMessage(newUser.getUsername());
+            
             // Return 201 when user successfully added
+
             return  ResponseEntity
                     .status(HttpStatusCode.valueOf(201))
                     .cacheControl(CacheControl.noCache())
