@@ -22,8 +22,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.project.csye6225.project.pojo.User;
+import com.project.csye6225.project.pojo.VerifyUser;
 import com.project.csye6225.project.service.PubSubService;
 import com.project.csye6225.project.service.UserService;
+import com.project.csye6225.project.service.VerifyUserService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -41,6 +43,9 @@ public class UserController {
     // Injecting User service  layer to this controller
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private VerifyUserService  verifyUserService;
 
     // Injecting the service needed for  Pub/Sub functionality
     @Autowired
@@ -199,6 +204,8 @@ public class UserController {
         }
         ObjectMapper mapper = getMapper();
         User newUser;
+        VerifyUser vuser = new VerifyUser();
+
         try {
             // Map the data of the user recieved from the Json body to the Pojo
             newUser = mapper.readValue(body, User.class);
@@ -213,6 +220,11 @@ public class UserController {
             JSONObject js = jsonMapper(newUser);
             infoLogger.info("User:"+newUser.getUsername()+"successfuly added");
             
+            vuser.setUsername(newUser.getUsername());
+            vuser.setVerified(false);
+            verifyUserService.addUser(vuser);
+            infoLogger.info("User:"+newUser.getUsername()+"successfuly added to Verification table");
+
             // Publish message to GCP
             pubSubService.publishPubSubMessage(newUser.getUsername());
             
