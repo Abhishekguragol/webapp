@@ -226,7 +226,7 @@ public class UserController {
             infoLogger.info("User:"+newUser.getUsername()+"successfuly added to Verification table");
 
             // Publish message to GCP
-            pubSubService.publishPubSubMessage(newUser.getUsername());
+            // pubSubService.publishPubSubMessage(newUser.getUsername());
             
             // Return 201 when user successfully added
 

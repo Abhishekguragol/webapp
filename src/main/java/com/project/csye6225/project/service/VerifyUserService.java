@@ -1,8 +1,7 @@
 package com.project.csye6225.project.service;
 
+import java.time.Duration;
 import java.time.Instant;
-import java.time.ZoneOffset;
-import java.util.Calendar;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -37,19 +36,21 @@ public class VerifyUserService {
     
         VerifyUser user = getByName(username);
 
-        Calendar cal = Calendar.getInstance();
-        Integer min = cal.get(Calendar.MINUTE);
+        Instant userInstant = user.getEmailSent();
+        Instant currentInstant = Instant.now();
 
-        Instant t = user.getEmailSent();
-        Integer sentMin = t.atZone(ZoneOffset.UTC).getMinute();
+        Duration duration = Duration.between(userInstant, currentInstant);
 
-        if(sentMin - min < 2){
+        long differenceInMinutes = Math.abs(duration.toMinutes());
+
+        if(differenceInMinutes <= 2) {
             user.setVerified(true);
             verifyUserRepository.save(user);
             infoLogger.info("User :"+username+"  has been verified successfully.");
-        } else{
+        } else {
             logger.error("Verification link timed out for user: "+username);
         	System.out.println("Not verified");
         }
+
     }
 }

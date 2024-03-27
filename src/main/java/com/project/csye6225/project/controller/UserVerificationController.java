@@ -5,6 +5,9 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.project.csye6225.project.service.VerifyUserService;
@@ -21,7 +24,7 @@ public class UserVerificationController {
     private VerifyUserService verifyUserService;
 
     @GetMapping("/verify/{id}")
-    public void verifyUser(@RequestParam Map<String,String> params, @PathVariable String id) {
+    public  ResponseEntity<Object> verifyUser(@RequestParam Map<String,String> params, @PathVariable String id) {
         
         // Logger for errors that occur in application
         Logger logger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_ERROR");
@@ -31,6 +34,10 @@ public class UserVerificationController {
         if(!(params.size() > 0) || id != null){
             infoLogger.info("Verifying user status");
             verifyUserService.updateStatus(id);
+            return  ResponseEntity
+                .status(HttpStatusCode.valueOf(200))
+                .cacheControl(CacheControl.noCache())
+                .build();
         }
         else{
             if(params.size() > 0){
@@ -39,6 +46,7 @@ public class UserVerificationController {
             else{
                 logger.error("Bad request : Username not present ");
             }
+            return ResponseEntity.badRequest().build();
             
         }
     }

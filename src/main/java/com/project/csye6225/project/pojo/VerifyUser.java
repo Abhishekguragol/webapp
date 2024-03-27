@@ -15,9 +15,23 @@ import jakarta.persistence.Table;
 @Table(name="verify_user")
 @Component
 public class VerifyUser {
+
+    // User fields
     @Id
     @UuidGenerator
     private String id;
+
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+
+    @Column(name = "verified")
+    private boolean verified;
+
+    @Column(name = "email_sent")
+    @CreationTimestamp
+    private Instant emailSent;
+
+    // Getters and setter
 
     public String getId() {
         return id;
@@ -27,9 +41,6 @@ public class VerifyUser {
         this.id = id;
     }
 
-    @Column(name = "username", nullable = false, unique = true)
-    private String username;
-
     public String getUsername() {
         return username;
     }
@@ -38,8 +49,7 @@ public class VerifyUser {
         this.username = username;
     }
 
-    @Column(name = "verified")
-    private boolean verified;
+    
 
     public boolean isVerified() {
         return verified;
@@ -49,9 +59,6 @@ public class VerifyUser {
         this.verified = verified;
     }
 
-    @Column(name = "email_sent")
-    @CreationTimestamp
-    private Instant emailSent;
 
     public Instant getEmailSent() {
         return emailSent;

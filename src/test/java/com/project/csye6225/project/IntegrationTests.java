@@ -1,9 +1,13 @@
 package com.project.csye6225.project;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.project.csye6225.project.pojo.User;
+import com.project.csye6225.project.pojo.VerifyUser;
+import com.project.csye6225.project.service.VerifyUserService;
+
 import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
 import org.springframework.http.HttpStatus;
@@ -13,6 +17,10 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 public class IntegrationTests {
+
+    @Autowired
+    private VerifyUserService  verifyUserService;
+
 
     @Test
     public void Test1(){
@@ -33,6 +41,10 @@ public class IntegrationTests {
             .post("/v1/user")
         .then()
             .statusCode(HttpStatus.CREATED.value());
+
+        VerifyUser vUser = verifyUserService.getByName("abhishek@gmail.com");
+        vUser.setVerified(true);
+        verifyUserService.addUser(vUser);
 
 
         // Checking if the user exists in the database using get request
