@@ -238,12 +238,18 @@ public class UserController {
             infoLogger.info("User:"+newUser.getUsername()+"successfuly added");
             
 
-            VerifyUser vuser = new VerifyUser(newUser.getUsername());
-            verifyUserService.addUser(vuser);
-            infoLogger.info("User:"+newUser.getUsername()+"successfuly added to Verification table");
+            try{
+                VerifyUser vuser = new VerifyUser(newUser.getUsername());
+                verifyUserService.addUser(vuser);
+                infoLogger.info("User:"+newUser.getUsername()+"successfuly added to Verification table");
 
             // Publish message to GCP
-            pubSubService.publishPubSubMessage(newUser.getUsername());
+                pubSubService.publishPubSubMessage(newUser.getUsername());
+            }
+            catch (Exception e){
+                logger.error("ecception "+e);
+            }
+            
             
             // Return 201 when user successfully added
 
@@ -254,6 +260,7 @@ public class UserController {
         } catch (Exception e) {
 
             logger.error("Bad Request");
+            
             return ResponseEntity.badRequest().build();
         }
         
