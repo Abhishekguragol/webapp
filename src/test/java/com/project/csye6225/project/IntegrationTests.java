@@ -42,6 +42,7 @@ public class IntegrationTests {
         .then()
             .statusCode(HttpStatus.CREATED.value());
 
+        // Setting user status as verified for testing purposes 
         VerifyUser vUser = verifyUserService.getByName("abhishek@gmail.com");
         vUser.setVerified(true);
         verifyUserService.addUser(vUser);

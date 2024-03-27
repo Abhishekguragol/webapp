@@ -27,11 +27,35 @@ public class VerifyUser {
     @Column(name = "verified")
     private boolean verified;
 
+    @Column(name = "verify_email_sent")
+    private boolean verifyEmailSent;
+
+
     @Column(name = "email_sent")
     @CreationTimestamp
     private Instant emailSent;
 
+    
+    public VerifyUser() {
+    }
+
+    public VerifyUser(String username) {
+        this.username = username;
+        this.verified = false;
+        this.verifyEmailSent = false;
+    }
+
     // Getters and setter
+
+    public boolean isVerifyEmailSent() {
+        return verifyEmailSent;
+    }
+
+    public void setVerifyEmailSent(boolean verifyEmailSent) {
+        this.verifyEmailSent = verifyEmailSent;
+    }
+
+    
 
     public String getId() {
         return id;

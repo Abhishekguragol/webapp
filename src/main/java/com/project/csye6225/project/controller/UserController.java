@@ -57,6 +57,12 @@ public class UserController {
     // Logger for logging  information about requests made by users
     Logger infoLogger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_INFO");
 
+    // Logger for debug that occur in application
+    Logger debugLogger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_DEBUG");
+
+    // Logger for warnings about requests made by users
+    Logger warnLogger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_WARN");
+
 
     // API to Get User Information
     @GetMapping("/user/self")
@@ -80,6 +86,10 @@ public class UserController {
             newUser.setUsername(userCreds[0]);
             newUser.setPassword(userCreds[1]);
 
+            VerifyUser vUser = verifyUserService.getByName(newUser.getUsername());
+            if(!vUser.isVerified()){
+                return ResponseEntity.badRequest().build();
+            }
             // Check if the user credentials are correct
             if(userService.userLoginAuth(newUser)){
 
@@ -90,6 +100,7 @@ public class UserController {
                 JSONObject obj = jsonMapper(user);
             
 
+                debugLogger.debug("User retrieved from db: "+user.getUsername());
                 infoLogger.info("Succefully fetched user details for:"+userCreds[0]);
                 // Return  the response entity with status code OK and the Json Object
                 return  ResponseEntity
@@ -147,9 +158,15 @@ public class UserController {
                 if(recUser.getAccountCreated() != null || recUser.getAccountUpdated()!=null || recUser.getUsername() != null) {
                     return ResponseEntity.badRequest().build();
                 }
+
+                VerifyUser vUser = verifyUserService.getByName(newUser.getUsername());
+                if(!vUser.isVerified()){
+                    return ResponseEntity.badRequest().build();
+                }
                 // Check if the user details being modified are the same as the authenticated user  
                     if(recUser.getPassword() == null) { recUser.setPassword(newUser.getPassword());}
                     // Update the user data with the new data provided in the request
+                    debugLogger.debug("Updating credentials for:"+newUser.getUsername());
                     userService.updateByID(userService
                                             .getByName(newUser.getUsername())
                                             .getID(), 
@@ -204,7 +221,6 @@ public class UserController {
         }
         ObjectMapper mapper = getMapper();
         User newUser;
-        VerifyUser vuser = new VerifyUser();
 
         try {
             // Map the data of the user recieved from the Json body to the Pojo
@@ -218,15 +234,16 @@ public class UserController {
             }
             userService.addUser(newUser);
             JSONObject js = jsonMapper(newUser);
+            debugLogger.debug("User account trying to be created:" + newUser.getUsername());
             infoLogger.info("User:"+newUser.getUsername()+"successfuly added");
             
-            vuser.setUsername(newUser.getUsername());
-            vuser.setVerified(false);
+
+            VerifyUser vuser = new VerifyUser(newUser.getUsername());
             verifyUserService.addUser(vuser);
             infoLogger.info("User:"+newUser.getUsername()+"successfuly added to Verification table");
 
             // Publish message to GCP
-            // pubSubService.publishPubSubMessage(newUser.getUsername());
+            pubSubService.publishPubSubMessage(newUser.getUsername());
             
             // Return 201 when user successfully added
 

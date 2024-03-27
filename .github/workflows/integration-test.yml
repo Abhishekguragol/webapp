@@ -27,11 +27,15 @@ jobs:
             sudo mkdir --parents /var/log/csye6225
             sudo touch /var/log/csye6225/errors.log
             sudo touch /var/log/csye6225/info.log
+            sudo touch /var/log/csye6225/debug.log
+            sudo touch /var/log/csye6225/warn.log
 
         - name: Giving write permissions
           run: |
             sudo chmod ugo+wx /var/log/csye6225/errors.log
             sudo chmod ugo+wx /var/log/csye6225/info.log
+            sudo chmod ugo+wx /var/log/csye6225/warn.log
+            sudo chmod ugo+wx /var/log/csye6225/debug.log
   
         - name: Run Spring Boot application with MySQL
           run: |

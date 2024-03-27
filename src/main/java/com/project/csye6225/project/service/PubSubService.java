@@ -15,15 +15,21 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PubSubService {
+
+    // Logger for logging  information about requests made by users
+    Logger infoLogger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_INFO");
+
+    // Logger for logging  information about requests made by users
+    Logger debugLogger = (Logger) LogManager.getLogger("WEBAPP_LOGGER_INFO");
     private final static String projectId = "csye6225-dev-414923";
-    private final static String topicId = "verify_user";
+    private final static String topicId = "verify_email";
     private final static String credentialsPath = "/opt/pubsub-service-account-key.json";
-    private final static String credentialsPathLocal = "./opt/pubsub-service-account-key.json";
-    private final static String subscriptionId = "console";
 
     public void publishPubSubMessage(String username) throws IOException, ExecutionException, InterruptedException {
     TopicName topicName = TopicName.of(projectId, topicId);
@@ -43,6 +49,8 @@ public class PubSubService {
       Gson gson = new Gson();
       String gsonMessage = gson.toJson(jsonMessage);
 
+      debugLogger.debug("PubbSub Debug: JSON message:"+gsonMessage);
+
       ByteString data = ByteString.copyFromUtf8(gsonMessage);
       PubsubMessage pubsubMessage = PubsubMessage.newBuilder()
                                                   .setData(data)
@@ -53,8 +61,7 @@ public class PubSubService {
       ApiFuture<String> messageIdFuture = publisher.publish(pubsubMessage);
       String messageId = messageIdFuture.get();
       System.out.println("Published message ID: " + messageId);
-      // Call subscription message
-      // subscribePubSubMessage();
+      infoLogger.info("PubSUB message INFO: message created with ID "+ messageId);
     } finally {
       if (publisher != null) {
         // When finished with the publisher, shutdown to free up resources.
