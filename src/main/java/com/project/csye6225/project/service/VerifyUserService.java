@@ -32,7 +32,7 @@ public class VerifyUserService {
         return fetchedUser;
     }
 
-    public void updateStatus(String username) {
+    public boolean updateStatus(String username) {
     
         VerifyUser user = getByName(username);
 
@@ -47,10 +47,13 @@ public class VerifyUserService {
             user.setVerified(true);
             verifyUserRepository.save(user);
             infoLogger.info("User :"+username+"  has been verified successfully.");
+            return true;
         } else {
             logger.error("Verification link timed out for user: "+username);
         	System.out.println("Not verified");
         }
+
+        return false;
 
     }
 }

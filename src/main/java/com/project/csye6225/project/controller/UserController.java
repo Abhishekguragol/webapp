@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -88,7 +89,7 @@ public class UserController {
 
             VerifyUser vUser = verifyUserService.getByName(newUser.getUsername());
             if(!vUser.isVerified()){
-                return ResponseEntity.badRequest().build();
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).cacheControl(CacheControl.noCache()).build();
             }
             // Check if the user credentials are correct
             if(userService.userLoginAuth(newUser)){
@@ -161,7 +162,7 @@ public class UserController {
 
                 VerifyUser vUser = verifyUserService.getByName(newUser.getUsername());
                 if(!vUser.isVerified()){
-                    return ResponseEntity.badRequest().build();
+                    ResponseEntity.status(HttpStatus.FORBIDDEN).cacheControl(CacheControl.noCache()).build();
                 }
                 // Check if the user details being modified are the same as the authenticated user  
                     if(recUser.getPassword() == null) { recUser.setPassword(newUser.getPassword());}
