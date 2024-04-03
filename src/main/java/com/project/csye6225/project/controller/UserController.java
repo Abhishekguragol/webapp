@@ -147,6 +147,10 @@ public class UserController {
             User newUser = new User();
             newUser.setUsername(userCreds[0]);
             newUser.setPassword(userCreds[1]);
+            VerifyUser vUser = verifyUserService.getByName(newUser.getUsername());
+                if(!vUser.isVerified()){
+                    ResponseEntity.status(HttpStatus.FORBIDDEN).cacheControl(CacheControl.noCache()).build();
+                }
             // Authenticate the user from the database
             if(userService.userLoginAuth(newUser)){
 
@@ -160,10 +164,7 @@ public class UserController {
                     return ResponseEntity.badRequest().build();
                 }
 
-                VerifyUser vUser = verifyUserService.getByName(newUser.getUsername());
-                if(!vUser.isVerified()){
-                    ResponseEntity.status(HttpStatus.FORBIDDEN).cacheControl(CacheControl.noCache()).build();
-                }
+                
                 // Check if the user details being modified are the same as the authenticated user  
                     if(recUser.getPassword() == null) { recUser.setPassword(newUser.getPassword());}
                     // Update the user data with the new data provided in the request
