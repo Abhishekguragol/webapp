@@ -149,7 +149,7 @@ public class UserController {
             newUser.setPassword(userCreds[1]);
             VerifyUser vUser = verifyUserService.getByName(newUser.getUsername());
                 if(!vUser.isVerified()){
-                    ResponseEntity.status(HttpStatus.FORBIDDEN).cacheControl(CacheControl.noCache()).build();
+                    return ResponseEntity.status(HttpStatus.FORBIDDEN).cacheControl(CacheControl.noCache()).build();
                 }
             // Authenticate the user from the database
             if(userService.userLoginAuth(newUser)){
