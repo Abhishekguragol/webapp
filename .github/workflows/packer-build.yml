@@ -170,12 +170,9 @@ jobs:
         - name: Refresh instances
           run: |
             gcloud compute instance-groups managed rolling-action replace ${{ vars.GROUP_MANAGER}} \
-            --project=${{ vars.PROJECT_ID }} \
             --region=${{ vars.REGION }} \
-            --version=name=projects/csye6225-dev-414923/regions/us-east1/instanceTemplates/${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
-            --max-surge=1 \
-            --max-unavailable=1 \
-            --quiet
+            --version=template=projects/csye6225-dev-414923/regions/us-east1/instanceTemplates/${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
+            
 
         - name: Check Status
           run: |
