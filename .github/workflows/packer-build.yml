@@ -24,20 +24,7 @@ jobs:
               run: sudo systemctl start mysql.service
             # Start spring boot and run integration tests
 
-            - name: Adding logging file
-              run: |
-                sudo mkdir --parents /var/log/csye6225
-                sudo touch /var/log/csye6225/errors.log
-                sudo touch /var/log/csye6225/info.log
-                sudo touch /var/log/csye6225/warn.log
-                sudo touch /var/log/csye6225/debug.log
-
-            - name: Giving write permissions
-              run: |
-                sudo chmod ugo+wx /var/log/csye6225/errors.log
-                sudo chmod ugo+wx /var/log/csye6225/info.log
-                sudo chmod ugo+wx /var/log/csye6225/debug.log
-                sudo chmod ugo+wx /var/log/csye6225/warn.log
+            
 
             - name: Run integration tests
               run: | 
@@ -83,6 +70,21 @@ jobs:
           with:
             java-version: 17
             distribution: temurin
+
+        - name: Adding logging file
+          run: |
+              sudo mkdir --parents /var/log/csye6225
+              sudo touch /var/log/csye6225/errors.log
+              sudo touch /var/log/csye6225/info.log
+              sudo touch /var/log/csye6225/warn.log
+              sudo touch /var/log/csye6225/debug.log
+
+        - name: Giving write permissions
+          run: |
+              sudo chmod ugo+wx /var/log/csye6225/errors.log
+              sudo chmod ugo+wx /var/log/csye6225/info.log
+              sudo chmod ugo+wx /var/log/csye6225/debug.log
+              sudo chmod ugo+wx /var/log/csye6225/warn.log
 
         # Build Spring boot project and remove old artifacts
         - name: Build project
@@ -130,7 +132,6 @@ jobs:
             --network=vpc-def \
             --subnet=vpc-def-webapp \
             --scopes='https://www.googleapis.com/auth/cloud-platform' \
-            --metadata=startup-script=${{ vars.SCRIPT }}
                                         
 
         - name: Refresh instances
@@ -153,6 +154,7 @@ jobs:
                   --region=${{ vars.REGION}} \
                   --format="value(status)")
     
+                STATUS=$(echo $STATUS | jq -r isReached)
                 if [[ $STATUS == "REFRESHING" ]]; then
                   echo "MIG is still refreshing. Waiting..."
                   sleep 10
