@@ -130,7 +130,7 @@ jobs:
             --machine-type=e2-medium \
             --network=vpc-def \
             --subnet=vpc-def-webapp \
-            --scopes='https://www.googleapis.com/auth/cloud-platform'
+            --scopes='https://www.googleapis.com/auth/cloud-platform' \
             --metadata=startup-script=${{ vars.SCRIPT }}
                                         
 
@@ -169,9 +169,11 @@ jobs:
               STATUS=$(gcloud compute instance-groups managed describe ${{ vars.GROUP_MANAGER}} \
                 --project=${{ vars.PROJECT_ID }} \
                 --region=${{ vars.REGION }} \
-                --format="value(status)")
+                --format=json)
+
+              STATUS=$(echo $STATUS | jq -r isReached)
     
-              if [[ $STATUS != "REFRESHED" ]]; then
+              if [[ $STATUS != "True" ]]; then
                 echo "MIG refresh failed."
                 exit 1
               else
