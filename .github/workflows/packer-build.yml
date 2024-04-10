@@ -131,14 +131,15 @@ jobs:
             --network=vpc-def \
             --subnet=vpc-def-webapp \
             --scopes='https://www.googleapis.com/auth/cloud-platform'
+            --metadata=startup-script=${{ vars.SCRIPT }}
                                         
 
         - name: Refresh instances
           run: |
             gcloud compute instance-groups managed rolling-action replace ${{ vars.GROUP_MANAGER}} \
             --project=${{ vars.PROJECT_ID }} \
-            --region=${{ vars.REGION }}\
-            --version-name= ${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }}\
+            --region=${{ vars.REGION }} \
+            --version-name= ${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
             --max-surge=1 \
             --max-unavailable=1 \
             --quiet
