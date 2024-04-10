@@ -130,26 +130,7 @@ jobs:
             --machine-type=e2-medium \
             --network=vpc-def \
             --subnet=vpc-def-webapp \
-            --scopes='https://www.googleapis.com/auth/cloud-platform' \
-            --metadata=startup-script='#!/bin/bash
-                                        if [ ! -f "/opt/db.properties" ]
-                                        then
-                                        sudo touch /opt/db.properties
-
-                                        sudo echo "spring.datasource.url=jdbc:mysql://${{ vars.INSTANCE_IP }}:3306/${{ vars.DB_NAME }}?createDatabaseIfNotExist=true" >> /opt/db.properties
-                                        sudo echo "spring.datasource.username=webapp" >> /opt/db.properties
-                                        sudo echo "spring.datasource.password=${{ secrets.GCP_DB_PASS }}" >> /opt/db.properties
-                                        sudo echo "spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver" >> /opt/db.properties
-                                        sudo echo "spring.jpa.hibernate.ddl-auto=update" >> /opt/db.properties
-                                        sudo echo "spring.jpa.show-sql=true" >> /opt/db.properties
-                                        sudo echo "spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL8Dialect" >> /opt/db.properties
-
-                                        sudo chown -R csye6225:csye6225 /opt/db.properties
-                                        else
-                                        sudo echo "db.properties already exists" >> /var/log/csye6225/app.log
-                                        fi
-                                        sudo touch /opt/pubsub-service-account-key.json
-                                        sudo echo '${{ secrets.GCP_SA_PRIVATE_KEY }}' >> /opt/pubsub-service-account-key.json'
+            --scopes='https://www.googleapis.com/auth/cloud-platform'
                                         
 
         - name: Refresh instances
