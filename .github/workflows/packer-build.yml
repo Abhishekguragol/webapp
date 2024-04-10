@@ -23,7 +23,20 @@ jobs:
             - name: Setup MySQL
               run: sudo systemctl start mysql.service
             # Start spring boot and run integration tests
-
+            - name: Adding logging file
+              run: |
+                sudo mkdir --parents /var/log/csye6225
+                sudo touch /var/log/csye6225/errors.log
+                sudo touch /var/log/csye6225/info.log
+                sudo touch /var/log/csye6225/warn.log
+                sudo touch /var/log/csye6225/debug.log
+  
+            - name: Giving write permissions
+              run: |
+                sudo chmod ugo+wx /var/log/csye6225/errors.log
+                sudo chmod ugo+wx /var/log/csye6225/info.log
+                sudo chmod ugo+wx /var/log/csye6225/debug.log
+                sudo chmod ugo+wx /var/log/csye6225/warn.log
             
 
             - name: Run integration tests
@@ -139,7 +152,7 @@ jobs:
             gcloud compute instance-groups managed rolling-action replace ${{ vars.GROUP_MANAGER}} \
             --project=${{ vars.PROJECT_ID }} \
             --region=${{ vars.REGION }} \
-            --version=name=${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
+            --version=name=projects/csye6225-dev-414923/regions/us-east1/instanceTemplates/${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
             --max-surge=1 \
             --max-unavailable=1 \
             --quiet
