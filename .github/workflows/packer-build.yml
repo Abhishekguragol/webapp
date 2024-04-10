@@ -76,13 +76,18 @@ jobs:
       runs-on: ubuntu-latest
       name:  Refresh Instance to Use Latest MI
       steps:
-        - name: Setup Gcloud CLI
+        - id: auth
           uses: google-github-actions/auth@v2
           with:
             credentials_json: ${{ secrets.GCLOUD_SERVICE_USER_JSON }}
+
+        
         # Setup Gcloud
         - name: Set up Cloud SDK
           uses: google-github-actions/setup-gcloud@v2
+
+        - name: Setup Gcloud CLI
+          uses: google-github-actions/auth@v2
 
         # Check if Gcloud installed successfully
         - name: Use gcloud CLI
@@ -146,7 +151,7 @@ jobs:
             --machine-type=e2-medium \
             --network=vpc-def \
             --subnet=vpc-def-webapp \
-            --image=${{  env.IMAGE_ID }} \
+            --image=csye6225-1712358420 \
             --image-project=${{ vars.PROJECT_ID }} \
             --tags=${{ vars.TAGS }} \
             --service-account=${{ vars.SERVICE_ACCOUNT_EMAIL  }} \
