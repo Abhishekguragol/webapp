@@ -139,7 +139,7 @@ jobs:
             gcloud compute instance-groups managed rolling-action replace ${{ vars.GROUP_MANAGER}} \
             --project=${{ vars.PROJECT_ID }} \
             --region=${{ vars.REGION }} \
-            --version-name= ${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
+            --version=name=${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
             --max-surge=1 \
             --max-unavailable=1 \
             --quiet
