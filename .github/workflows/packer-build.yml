@@ -106,7 +106,7 @@ jobs:
         # Creating new image template using the latest version of MI
         - name:  Create Image Template from Latest Image
           run:  |
-            gcloud compute instance-templates create csye6225_template_git \
+            gcloud compute instance-templates create ${{ vars.INSATNCE_TEMPLATE }} \
             --region=${{ vars.REGION }} \
             --machine-type=e2-medium \
             --network=vpc-def \
@@ -134,12 +134,12 @@ jobs:
                                         sudo touch /opt/pubsub-service-account-key.json
                                         sudo echo '${base64decode(${{ secrets.GCP_SA_PRIVATE_KEY }})}' >> /opt/pubsub-service-account-key.json
                                         EOF' \
-            --service-account=$SERVICE_ACCOUNT_EMAIL \
+            --service-account=${{ vars.SERVICE_ACCOUNT_EMAIL  }} \
             --scopes='https://www.googleapis.com/auth/cloud-platform'
 
         - name: Refresh instances
           run: |
-            gcloud compute instance-groups managed rolling-action replace csye6225-group-manager \
+            gcloud compute instance-groups managed rolling-action replace ${{ vars.GROUP_MANAGER}} \
             --project=${{ vars.PROJECT_ID }} \
             --region=${{ vars.REGION }}\
             --version-name=new-csye6225_template_git \
@@ -153,7 +153,7 @@ jobs:
           run: |
               # Poll the status of the MIG until it's completed refreshing
               while true; do
-                STATUS=$(gcloud compute instance-groups managed describe csye6225-group-manager \
+                STATUS=$(gcloud compute instance-groups managed describe ${{ vars.GROUP_MANAGER}} \
                   --project=${{ vars.PROJECT_ID }} \
                   --region=${{ vars.REGION}} \
                   --format="value(status)")
@@ -170,7 +170,7 @@ jobs:
         - name: Check MIG refresh status
           run: |
               # Check the final status of the MIG refresh
-              STATUS=$(gcloud compute instance-groups managed describe INSTANCE_GROUP_MANAGER_NAME \
+              STATUS=$(gcloud compute instance-groups managed describe ${{ vars.GROUP_MANAGER}} \
                 --project=${{ vars.PROJECT_ID }} \
                 --region=${{ vars.REGION }} \
                 --format="value(status)")
