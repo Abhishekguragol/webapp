@@ -169,8 +169,8 @@ jobs:
 
         - name: Refresh instances
           run: |
-            gcloud compute instance-groups managed rolling-action replace ${{ vars.GROUP_MANAGER}} \
-            --region=${{ vars.REGION }} \
+            gcloud compute instance-groups managed rolling-action replace  ${{ vars.GROUP_MANAGER}} \
+            --region=${{ vars.REGION }} \ --
             --version=template=projects/csye6225-dev-414923/regions/us-east1/instanceTemplates/${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
             
 
