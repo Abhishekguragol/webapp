@@ -169,14 +169,14 @@ jobs:
 
         - name: Refresh instances
           run: |
-            gcloud compute instance-groups managed rolling-action replace  ${{ vars.GROUP_MANAGER}} \
-            --region=${{ vars.REGION }} \
+            gcloud compute instance-groups managed rolling-action start-update ${{ vars.MIG }} \
             --version=template=projects/csye6225-dev-414923/regions/us-east1/instanceTemplates/${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
+            --region=${{ vars.REGION }
             
 
         - name: Check Status
           run: |
-                status=$(gcloud compute instance-groups managed wait-until webapp-igm --region=us-east4 --stable)
+                status=$(gcloud compute instance-groups managed wait-until ${{ vars.MIG }} --region=${{ vars.REGION }}--stable)
                 echo "Status: $status"
                 if [[ $status == "Group is stable" ]]; then
                   echo "Refreshed successfully"
