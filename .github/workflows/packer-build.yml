@@ -72,7 +72,10 @@ jobs:
               run: packer validate ./build-mi.pkr.hcl
             # Build image with packer
             - name: Packer build
-              run: packer build ./build-mi.pkr.hcl
+              run: |
+                OUTPUT=$(packer build ./build-mi.pkr.hcl) \
+                IMAGE_ID=$(echo "$OUTPUT" | sed -n 's/.: \(packer-[0-9]\)/\1/p') \
+                echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_ENV
 
     refresh-instance:
       needs: build
@@ -90,30 +93,24 @@ jobs:
         - name: Use gcloud CLI
           run: gcloud info
         # Steps to fetch the details of the latest image
-        - name: Fecth Details of Latest image
-          run: |
-            MI_ID=$(gcloud compute images  list \
-            --project=csye6225-dev-414923 \
-            --filter="family=csye6225-app-image" \
-            --sort-by="creationTimestamp DESC" \
-            --format="value(name)" \
-            --limit=1)
-            echo "MI_ID=${MI_ID}" >>  $GITHUB_ENV
         # Printing all the environment variables
         - name: Print ENV variables
           run: |
-            echo "MI_ID: $MI_ID"
+            RANDOM_ID=$(uuidgen | tr -d '-' | cut -c1-6)
+            echo "Generated random ID: $RANDOM_ID"
+            echo "RANDOM_ID=${RANDOM_ID}" >> $GITHUB_ENV
+            echo "RANDOM_ID: $RANDOM_ID"
         # Creating new image template using the latest version of MI
         - name:  Create Image Template from Latest Image
           run:  |
-            gcloud compute instance-templates create ${{ vars.INSATNCE_TEMPLATE }} \
+            gcloud compute instance-templates create ${{ vars.INSATNCE_TEMPLATE }}-$RANDOM_ID \
             --region=${{ vars.REGION }} \
             --machine-type=e2-medium \
             --network=vpc-def \
             --subnet=vpc-def-webapp \
             --image=$MI_ID \
             --image-project=${{ vars.PROJECT_ID }} \
-            --tags=${{ vars.TAGS }}
+            --tags=${{ vars.TAGS }} \
             --service-account=${{ vars.SERVICE_ACCOUNT_EMAIL  }} \
             --scopes='https://www.googleapis.com/auth/cloud-platform \
             --metadata=startup-script='#!/bin/bash
@@ -142,7 +139,7 @@ jobs:
             gcloud compute instance-groups managed rolling-action replace ${{ vars.GROUP_MANAGER}} \
             --project=${{ vars.PROJECT_ID }} \
             --region=${{ vars.REGION }}\
-            --version-name=new-csye6225_template_git \
+            --version-name= ${{ vars.INSATNCE_TEMPLATE }}-$RANDOM_ID\
             --max-surge=1 \
             --max-unavailable=1 \
             --min-ready=1 \
