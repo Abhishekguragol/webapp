@@ -109,7 +109,7 @@ jobs:
         - name: Packer build
           run: |
             packer build ./build-mi.pkr.hcl
-            image_id=$(gcloud compute images list --filter="family=csye6225-app-image" --format="value(NAME)" --sort-by=~creationTimestamp --limit=1}
+            image_id=$(gcloud compute images list --filter="family=csye6225-app-image" --format="value(NAME)" --sort-by=~creationTimestamp --limit=1)
             echo "IMAGE_ID=$image_id" >> $GITHUB_ENV
             echo "Image ID: $image_id"
         # Printing all the environment variables
@@ -124,14 +124,11 @@ jobs:
         - name:  Create Image Template from Latest Image
           run:  |
             gcloud compute instance-templates create ${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID}} \
-            --region=${{ vars.REGION }} \
+            --instance-template-region=${{ vars.REGION }} \
             --machine-type=e2-medium \
             --network=vpc-def \
             --subnet=vpc-def-webapp \
             --image=${{ env.IMAGE_ID }} \
-            --image-project=${{ vars.PROJECT_ID }} \
-            --tags=${{ vars.TAGS }} \
-            --service-account=${{ vars.SERVICE_ACCOUNT_EMAIL  }} \
             --scopes='https://www.googleapis.com/auth/cloud-platform' \
             --metadata=startup-script='#!/bin/bash
                                         if [ ! -f "/opt/db.properties" ]
