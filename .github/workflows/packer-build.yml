@@ -110,6 +110,7 @@ jobs:
           run: |
             OUTPUT=$(packer build ./build-mi.pkr.hcl) 
             image_id=$(echo "$OUTPUT" | grep -Eo 'csye6225-\d{10}')
+            echo "$OUTPUT"
             echo "$image_id"
             echo "IMAGE_ID=$image_id" >> $GITHUB_ENV
         # Printing all the environment variables
@@ -162,7 +163,6 @@ jobs:
             --version-name= ${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }}\
             --max-surge=1 \
             --max-unavailable=1 \
-            --min-ready=1 \
             --quiet
 
         - name: Wait for MIG refresh to complete
