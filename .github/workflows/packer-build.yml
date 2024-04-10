@@ -72,7 +72,6 @@ jobs:
               run: packer validate ./build-mi.pkr.hcl
 
     refresh-instance:
-      needs: build
       runs-on: ubuntu-latest
       name:  Refresh Instance to Use Latest MI
       steps:
@@ -85,9 +84,6 @@ jobs:
         # Setup Gcloud
         - name: Set up Cloud SDK
           uses: google-github-actions/setup-gcloud@v2
-
-        - name: Setup Gcloud CLI
-          uses: google-github-actions/auth@v2
 
         # Check if Gcloud installed successfully
         - name: Use gcloud CLI
