@@ -108,9 +108,9 @@ jobs:
         # Build image with packer
         - name: Packer build
           run: |
-            OUTPUT=$(packer build ./build-mi.pkr.hcl) 
-            echo "IMAGE_ID=csye6225-1712358420" >> $GITHUB_ENV
-            image_id=$(echo ${OUTPUT:(-20)}
+            packer build ./build-mi.pkr.hcl
+            image_id=$(gcloud compute images list --filter="family=csye6225-app-image" --format="value(NAME)" --sort-by=~creationTimestamp --limit=1}
+            echo "IMAGE_ID=$image_id" >> $GITHUB_ENV
             echo "Image ID: $image_id"
         # Printing all the environment variables
         - name: Print ENV variables
