@@ -70,12 +70,6 @@ jobs:
             # Validate Packer Files
             - name: Packer validate
               run: packer validate ./build-mi.pkr.hcl
-            # Build image with packer
-            - name: Packer build
-              run: |
-                OUTPUT=$(packer build ./build-mi.pkr.hcl) 
-                IMAGE_ID=$(echo "$OUTPUT" | sed -n 's/.: \(packer-[0-9]\)/\1/p') 
-                echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_ENV
 
     refresh-instance:
       needs: build
@@ -93,6 +87,13 @@ jobs:
         - name: Use gcloud CLI
           run: gcloud info
         # Steps to fetch the details of the latest image
+
+        # Build image with packer
+        - name: Packer build
+          run: |
+            OUTPUT=$(packer build ./build-mi.pkr.hcl) 
+            IMAGE_ID=$(echo "$OUTPUT" | sed -n 's/.: \(packer-[0-9]\)/\1/p') 
+            echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_ENV
         # Printing all the environment variables
         - name: Print ENV variables
           run: |
@@ -103,7 +104,7 @@ jobs:
         # Creating new image template using the latest version of MI
         - name:  Create Image Template from Latest Image
           run:  |
-            gcloud compute instance-templates create ${{ vars.INSATNCE_TEMPLATE }}-$RANDOM_ID \
+            gcloud compute instance-templates create ${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID}} \
             --region=${{ vars.REGION }} \
             --machine-type=e2-medium \
             --network=vpc-def \
@@ -112,7 +113,7 @@ jobs:
             --image-project=${{ vars.PROJECT_ID }} \
             --tags=${{ vars.TAGS }} \
             --service-account=${{ vars.SERVICE_ACCOUNT_EMAIL  }} \
-            --scopes='https://www.googleapis.com/auth/cloud-platform \
+            --scopes='https://www.googleapis.com/auth/cloud-platform' \
             --metadata=startup-script='#!/bin/bash
                                         if [ ! -f "/opt/db.properties" ]
                                         then
