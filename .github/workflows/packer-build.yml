@@ -73,8 +73,8 @@ jobs:
             # Build image with packer
             - name: Packer build
               run: |
-                OUTPUT=$(packer build ./build-mi.pkr.hcl) \
-                IMAGE_ID=$(echo "$OUTPUT" | sed -n 's/.: \(packer-[0-9]\)/\1/p') \
+                OUTPUT=$(packer build ./build-mi.pkr.hcl) 
+                IMAGE_ID=$(echo "$OUTPUT" | sed -n 's/.: \(packer-[0-9]\)/\1/p') 
                 echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_ENV
 
     refresh-instance:
