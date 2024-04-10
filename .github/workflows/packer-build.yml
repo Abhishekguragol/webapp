@@ -168,10 +168,10 @@ jobs:
                                                                     
 
         - name: Refresh instances
-          run: |
-            gcloud compute instance-groups managed rolling-action start-update ${{ vars.MIG }} \
-            --version=template=projects/csye6225-dev-414923/regions/us-east1/instanceTemplates/${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
-            --region=${{ vars.REGION }
+          run:  |
+              gcloud compute instance-groups managed rolling-action start-update ${{ vars.MIG }} \
+              --version=template=projects/csye6225-dev-414923/regions/us-east1/instanceTemplates/${{ vars.INSATNCE_TEMPLATE }}-${{ env.RANDOM_ID }} \
+              --region=${{ vars.REGION }}
             
 
         - name: Check Status
