@@ -109,8 +109,8 @@ jobs:
         - name: Packer build
           run: |
             OUTPUT=$(packer build ./build-mi.pkr.hcl) 
-            image_id=$(echo "$OUTPUT" | grep -Eo 'csye6225-\d{10}')
             echo "$OUTPUT"
+            image_id=$(echo "$OUTPUT" | grep -Eo 'csye6225-\d{10}')
             echo "$image_id"
             echo "IMAGE_ID=$image_id" >> $GITHUB_ENV
         # Printing all the environment variables
