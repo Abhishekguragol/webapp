@@ -114,6 +114,8 @@ jobs:
             --image=$MI_ID \
             --image-project=${{ vars.PROJECT_ID }} \
             --tags=${{ vars.TAGS }}
+            --service-account=${{ vars.SERVICE_ACCOUNT_EMAIL  }} \
+            --scopes='https://www.googleapis.com/auth/cloud-platform \
             --metadata=startup-script='#!/bin/bash
                                         if [ ! -f "/opt/db.properties" ]
                                         then
@@ -132,10 +134,8 @@ jobs:
                                         sudo echo "db.properties already exists" >> /var/log/csye6225/app.log
                                         fi
                                         sudo touch /opt/pubsub-service-account-key.json
-                                        sudo echo '${base64decode(${{ secrets.GCP_SA_PRIVATE_KEY }})}' >> /opt/pubsub-service-account-key.json
-                                        EOF' \
-            --service-account=${{ vars.SERVICE_ACCOUNT_EMAIL  }} \
-            --scopes='https://www.googleapis.com/auth/cloud-platform'
+                                        sudo echo '${{ secrets.GCP_SA_PRIVATE_KEY }}' >> /opt/pubsub-service-account-key.json'
+                                        
 
         - name: Refresh instances
           run: |
