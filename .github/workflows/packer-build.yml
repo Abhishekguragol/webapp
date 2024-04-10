@@ -108,7 +108,7 @@ jobs:
             --machine-type=e2-medium \
             --network=vpc-def \
             --subnet=vpc-def-webapp \
-            --image=$MI_ID \
+            --image=${{  env.IMAGE_ID }} \
             --image-project=${{ vars.PROJECT_ID }} \
             --tags=${{ vars.TAGS }} \
             --service-account=${{ vars.SERVICE_ACCOUNT_EMAIL  }} \
