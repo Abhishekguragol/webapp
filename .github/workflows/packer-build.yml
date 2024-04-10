@@ -3,7 +3,7 @@ name: packer-build
 on:
     pull_request:
       branches: [main]
-      types: [closed]
+      # types: [closed]
   
 
 jobs:
