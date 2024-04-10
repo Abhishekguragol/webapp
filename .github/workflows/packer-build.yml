@@ -128,8 +128,7 @@ jobs:
         # Build image with packer
         - name: Packer build
           run: |
-            OUTPUT=$(packer build build-mi.pkr.hcl) 
-            IMAGE_ID=$(echo "$OUTPUT" | sed -n 's/.: \(packer-[0-9]\)/\1/p') 
+            IMAGE_ID=$(packer build build-mi.pkr.hcl | sed -n 's/.: \(packer-[0-9]\)/\1/p') 
             echo "IMAGE_ID=$IMAGE_ID" >> $GITHUB_ENV
         # Printing all the environment variables
         - name: Print ENV variables
